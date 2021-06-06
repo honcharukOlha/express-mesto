@@ -6,18 +6,17 @@
   "lint": "npx eslint .",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "lint": "npm run lint:jshint && npm run lint:eslint && npm run lint:jscs"
   },
   "author": "olya-goncharuk",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
-    "mongodb": "^3.6.9",
     "mongoose": "^5.12.12"
   },
   "devDependencies": {
-    "concurrently": "^6.2.0",
     "eslint": "^7.27.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.23.4",
@@ -31,5 +30,9 @@
     "url": "https://github.com/honcharukOlha/express-mesto/issues"
   },
   "homepage": "https://github.com/honcharukOlha/express-mesto#readme",
-  "keywords": []
+  "keywords": [],
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "none"
+  }
 }
