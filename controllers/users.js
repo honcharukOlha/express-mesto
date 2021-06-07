@@ -23,26 +23,26 @@ module.exports.getUserById = (req, res) => {
     .catch((error) => {
       if (error.message === NOT_FOUND_ERROR_MESSAGE) {
         res.status(ERROR_NOT_FOUND_CODE).send({
-          message: 'Ресурс не найден',
+          message: 'Ресурс не найден'
         });
         return;
       }
       if (error.name === 'CastError') {
         res.status(ERROR_CODE).send({ message: 'Пользователь не найден' });
       }
+      res.status(500).send({ message: 'Произошла ошибка' });
     });
-  res.status(500).send({ message: 'Произошла ошибка' });
 };
 
 module.exports.createUser = (req, res) => {
-  const ERROR_CODE = 404;
+  const ERROR_CODE = 400;
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
     .then((user) => res.send({ data: user }))
     .catch((error) => {
       if (error.name === 'ValidationError') {
         res.status(ERROR_CODE).send({
-          message: 'Переданы некорректные данные в методы создания пользователя',
+          message: 'Переданы некорректные данные в методы создания пользователя'
         });
         return;
       }
@@ -58,12 +58,12 @@ module.exports.updateUser = (req, res) => {
     owner,
     {
       name,
-      about,
+      about
     },
     {
       new: true,
-    },
-    { runValidators: true },
+      runValidators: true
+    }
   )
     .orFail(() => {
       Error(NOT_FOUND_ERROR_MESSAGE);
@@ -76,15 +76,15 @@ module.exports.updateUser = (req, res) => {
     .catch((error) => {
       if (error.message === NOT_FOUND_ERROR_MESSAGE) {
         res.status(ERROR_NOT_FOUND_CODE).send({
-          message: 'Ресурс не найден',
+          message: 'Ресурс не найден'
         });
         return;
       }
-      if (error.name === 'CastError') {
+      if (error.name === 'ValidationError') {
         res.status(ERROR_CODE).send({ message: 'Пользователь не найден' });
       }
+      res.status(500).send({ message: 'Произошла ошибка' });
     });
-  res.status(500).send({ message: 'Произошла ошибка' });
 };
 
 module.exports.updateAvatar = (req, res) => {
@@ -96,8 +96,8 @@ module.exports.updateAvatar = (req, res) => {
     { avatar },
     {
       new: true,
-    },
-    { runValidators: true },
+      runValidators: true
+    }
   )
     .orFail(() => {
       Error(NOT_FOUND_ERROR_MESSAGE);
@@ -110,13 +110,13 @@ module.exports.updateAvatar = (req, res) => {
     .catch((error) => {
       if (error.message === NOT_FOUND_ERROR_MESSAGE) {
         res.status(ERROR_NOT_FOUND_CODE).send({
-          message: 'Ресурс не найден',
+          message: 'Ресурс не найден'
         });
         return;
       }
-      if (error.name === 'CastError') {
+      if (error.name === 'ValidationError') {
         res.status(ERROR_CODE).send({ message: 'Пользователь не найден' });
       }
+      res.status(500).send({ message: 'Произошла ошибка' });
     });
-  res.status(500).send({ message: 'Произошла ошибка' });
 };
