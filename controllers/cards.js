@@ -15,9 +15,9 @@ module.exports.createCard = (req, res) => {
     .then((card) => res.send({ data: card }))
     .catch((error) => {
       if (error.name === 'ValidationError') {
-        res.status(ERROR_CODE).send({
-          message: 'Переданы некорректные данные в методы создания карточки'
-        });
+        res
+          .status(ERROR_CODE)
+          .send({ message: 'Переданы некорректные данные' });
         return;
       }
       res.status(500).send({ message: 'Произошла ошибка' });
@@ -29,12 +29,10 @@ module.exports.likeCard = (req, res) => {
   const ERROR_NOT_FOUND_CODE = 404;
   Card.findByIdAndUpdate(
     req.params.cardId,
-    { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
-    { new: true }
+    { $addToSet: { likes: req.user._id } },
+    { new: true },
   )
-    .orFail(() => {
-      Error(NOT_FOUND_ERROR_MESSAGE);
-    })
+    .orFail(new Error(NOT_FOUND_ERROR_MESSAGE))
     .then((card) => {
       if (card) {
         res.send({ data: card });
@@ -43,12 +41,14 @@ module.exports.likeCard = (req, res) => {
     .catch((error) => {
       if (error.message === NOT_FOUND_ERROR_MESSAGE) {
         res.status(ERROR_NOT_FOUND_CODE).send({
-          message: 'Ресурс не найден'
+          message: 'Ресурс не найден',
         });
         return;
       }
       if (error.name === 'CastError') {
-        res.status(ERROR_CODE).send({ message: 'Карточка не найдена' });
+        res
+          .status(ERROR_CODE)
+          .send({ message: 'Переданы некорректные данные' });
       }
       res.status(500).send({ message: 'Произошла ошибка' });
     });
@@ -60,11 +60,9 @@ module.exports.dislikeCard = (req, res) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } }, // убрать _id из массива
-    { new: true }
+    { new: true },
   )
-    .orFail(() => {
-      Error(NOT_FOUND_ERROR_MESSAGE);
-    })
+    .orFail(new Error(NOT_FOUND_ERROR_MESSAGE))
     .then((card) => {
       if (card) {
         res.send({ data: card });
@@ -73,12 +71,14 @@ module.exports.dislikeCard = (req, res) => {
     .catch((error) => {
       if (error.message === NOT_FOUND_ERROR_MESSAGE) {
         res.status(ERROR_NOT_FOUND_CODE).send({
-          message: 'Ресурс не найден'
+          message: 'Ресурс не найден',
         });
         return;
       }
       if (error.name === 'CastError') {
-        res.status(ERROR_CODE).send({ message: 'Карточка не найдена' });
+        res
+          .status(ERROR_CODE)
+          .send({ message: 'Переданы некорректные данные' });
       }
       res.status(500).send({ message: 'Произошла ошибка' });
     });
@@ -88,10 +88,8 @@ module.exports.deleteCard = (req, res) => {
   const ERROR_CODE = 400;
   const ERROR_NOT_FOUND_CODE = 404;
   const owner = req.user._id;
-  Card.findOneAndDelete({ _id: req.params.id, owner })
-    .orFail(() => {
-      Error(NOT_FOUND_ERROR_MESSAGE);
-    })
+  Card.findOneAndDelete({ _id: req.params.cardId, owner })
+    .orFail(new Error(NOT_FOUND_ERROR_MESSAGE))
     .then((card) => {
       if (card) {
         res.send({ data: card });
@@ -100,12 +98,14 @@ module.exports.deleteCard = (req, res) => {
     .catch((error) => {
       if (error.message === NOT_FOUND_ERROR_MESSAGE) {
         res.status(ERROR_NOT_FOUND_CODE).send({
-          message: 'Ресурс не найден'
+          message: 'Ресурс не найден',
         });
         return;
       }
       if (error.name === 'CastError') {
-        res.status(ERROR_CODE).send({ message: 'Карточка не найдена' });
+        res
+          .status(ERROR_CODE)
+          .send({ message: 'Переданы некорректные данные' });
       }
       res.status(500).send({ message: 'Произошла ошибка' });
     });

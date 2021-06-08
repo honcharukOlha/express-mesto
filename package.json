@@ -33,6 +33,6 @@
   "keywords": [],
   "prettier": {
     "singleQuote": true,
-    "trailingComma": "none"
+    "trailingComma": "all"
   }
 }

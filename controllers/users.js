@@ -12,9 +12,7 @@ module.exports.getUserById = (req, res) => {
   const ERROR_CODE = 400;
   const ERROR_NOT_FOUND_CODE = 404;
   User.findById(req.params.userId)
-    .orFail(() => {
-      Error(NOT_FOUND_ERROR_MESSAGE);
-    })
+    .orFail(new Error(NOT_FOUND_ERROR_MESSAGE))
     .then((user) => {
       if (user) {
         res.send({ data: user });
@@ -23,12 +21,14 @@ module.exports.getUserById = (req, res) => {
     .catch((error) => {
       if (error.message === NOT_FOUND_ERROR_MESSAGE) {
         res.status(ERROR_NOT_FOUND_CODE).send({
-          message: 'Ресурс не найден'
+          message: 'Ресурс не найден',
         });
         return;
       }
       if (error.name === 'CastError') {
-        res.status(ERROR_CODE).send({ message: 'Пользователь не найден' });
+        res
+          .status(ERROR_CODE)
+          .send({ message: 'Переданы некорректные данные' });
       }
       res.status(500).send({ message: 'Произошла ошибка' });
     });
@@ -42,7 +42,7 @@ module.exports.createUser = (req, res) => {
     .catch((error) => {
       if (error.name === 'ValidationError') {
         res.status(ERROR_CODE).send({
-          message: 'Переданы некорректные данные в методы создания пользователя'
+          message: 'Переданы некорректные данные',
         });
         return;
       }
@@ -58,16 +58,14 @@ module.exports.updateUser = (req, res) => {
     owner,
     {
       name,
-      about
+      about,
     },
     {
       new: true,
-      runValidators: true
-    }
+      runValidators: true,
+    },
   )
-    .orFail(() => {
-      Error(NOT_FOUND_ERROR_MESSAGE);
-    })
+    .orFail(new Error(NOT_FOUND_ERROR_MESSAGE))
     .then((user) => {
       if (user) {
         res.send({ data: user });
@@ -76,12 +74,14 @@ module.exports.updateUser = (req, res) => {
     .catch((error) => {
       if (error.message === NOT_FOUND_ERROR_MESSAGE) {
         res.status(ERROR_NOT_FOUND_CODE).send({
-          message: 'Ресурс не найден'
+          message: 'Ресурс не найден',
         });
         return;
       }
       if (error.name === 'ValidationError') {
-        res.status(ERROR_CODE).send({ message: 'Пользователь не найден' });
+        res
+          .status(ERROR_CODE)
+          .send({ message: 'Переданы некорректные данные' });
       }
       res.status(500).send({ message: 'Произошла ошибка' });
     });
@@ -96,12 +96,10 @@ module.exports.updateAvatar = (req, res) => {
     { avatar },
     {
       new: true,
-      runValidators: true
-    }
+      runValidators: true,
+    },
   )
-    .orFail(() => {
-      Error(NOT_FOUND_ERROR_MESSAGE);
-    })
+    .orFail(new Error(NOT_FOUND_ERROR_MESSAGE))
     .then((user) => {
       if (user) {
         res.send({ data: user });
@@ -110,12 +108,14 @@ module.exports.updateAvatar = (req, res) => {
     .catch((error) => {
       if (error.message === NOT_FOUND_ERROR_MESSAGE) {
         res.status(ERROR_NOT_FOUND_CODE).send({
-          message: 'Ресурс не найден'
+          message: 'Ресурс не найден',
         });
         return;
       }
       if (error.name === 'ValidationError') {
-        res.status(ERROR_CODE).send({ message: 'Пользователь не найден' });
+        res
+          .status(ERROR_CODE)
+          .send({ message: 'Переданы некорректные данные' });
       }
       res.status(500).send({ message: 'Произошла ошибка' });
     });
