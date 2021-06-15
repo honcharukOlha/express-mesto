@@ -1,58 +1,61 @@
+const bcrypt = require('bcryptjs'); // импортируем bcrypt
+const validator = require('validator');
 const User = require('../models/user');
+const NotFoundError = require('../errors/not-found-error');
+const ValidationError = require('../errors/validation-error');
+const MongoError = require('../errors/mongo-error');
 
-const NOT_FOUND_ERROR_MESSAGE = 'NotFound';
-
-module.exports.getUser = (req, res) => {
+module.exports.getUser = (req, res, next) => {
   User.find({})
     .then((user) => res.send({ data: user }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch(next);
 };
 
-module.exports.getUserById = (req, res) => {
-  const ERROR_CODE = 400;
-  const ERROR_NOT_FOUND_CODE = 404;
+module.exports.getUserById = (req, res, next) => {
   User.findById(req.params.userId)
-    .orFail(new Error(NOT_FOUND_ERROR_MESSAGE))
+    .orFail(() => new NotFoundError({ message: 'Нет пользователя с таким id' }))
     .then((user) => {
       if (user) {
         res.send({ data: user });
       }
     })
-    .catch((error) => {
-      if (error.message === NOT_FOUND_ERROR_MESSAGE) {
-        res.status(ERROR_NOT_FOUND_CODE).send({
-          message: 'Ресурс не найден',
-        });
-        return;
-      }
-      if (error.name === 'CastError') {
-        res
-          .status(ERROR_CODE)
-          .send({ message: 'Переданы некорректные данные' });
-      }
-      res.status(500).send({ message: 'Произошла ошибка' });
-    });
+    .catch(() => {
+      throw new ValidationError({ message: 'Переданы некорректные данные' });
+    })
+    .catch(next);
 };
 
-module.exports.createUser = (req, res) => {
-  const ERROR_CODE = 400;
-  const { name, about, avatar } = req.body;
-  User.create({ name, about, avatar })
+module.exports.createUser = (req, res, next) => {
+  const {
+    name,
+    about,
+    avatar,
+    email,
+    password,
+  } = req.body;
+  if ((!email || !password)) {
+    throw new MongoError({ message: 'Не заполнены обязательные поля' });
+  }
+  if (!validator.isEmail(email)) {
+    throw new ValidationError({ message: 'Переданы некорректные данные' });
+  }
+  // хешируем пароль
+  bcrypt.hash(req.body.password, 10)
+    .then((hash) => User.create({
+      name, about, avatar, email, password: hash,
+    }))
     .then((user) => res.send({ data: user }))
-    .catch((error) => {
-      if (error.name === 'ValidationError') {
-        res.status(ERROR_CODE).send({
-          message: 'Переданы некорректные данные',
-        });
-        return;
+    .catch((err) => {
+      if (err.name === 'MongoError' && err.code === 11000) {
+        const error = new MongoError({ message: 'Пользователь с указанным email уже существует' });
+        error.statusCode = MongoError;
+        next(error);
       }
-      res.status(500).send({ message: 'Произошла ошибка' });
-    });
+    })
+    .catch(next);
 };
 
-module.exports.updateUser = (req, res) => {
-  const ERROR_CODE = 400;
-  const ERROR_NOT_FOUND_CODE = 404;
+module.exports.updateUser = (req, res, next) => {
   const { name, about, owner = req.user._id } = req.body;
   User.findByIdAndUpdate(
     owner,
@@ -65,31 +68,19 @@ module.exports.updateUser = (req, res) => {
       runValidators: true,
     },
   )
-    .orFail(new Error(NOT_FOUND_ERROR_MESSAGE))
+    .orFail(() => new NotFoundError({ message: 'Нет пользователя с таким id' }))
     .then((user) => {
       if (user) {
         res.send({ data: user });
       }
     })
-    .catch((error) => {
-      if (error.message === NOT_FOUND_ERROR_MESSAGE) {
-        res.status(ERROR_NOT_FOUND_CODE).send({
-          message: 'Ресурс не найден',
-        });
-        return;
-      }
-      if (error.name === 'ValidationError') {
-        res
-          .status(ERROR_CODE)
-          .send({ message: 'Переданы некорректные данные' });
-      }
-      res.status(500).send({ message: 'Произошла ошибка' });
-    });
+    .catch(() => {
+      throw new ValidationError({ message: 'Переданы некорректные данные' });
+    })
+    .catch(next);
 };
 
-module.exports.updateAvatar = (req, res) => {
-  const ERROR_CODE = 400;
-  const ERROR_NOT_FOUND_CODE = 404;
+module.exports.updateAvatar = (req, res, next) => {
   const { avatar, owner = req.user._id } = req.body;
   User.findByIdAndUpdate(
     owner,
@@ -99,24 +90,28 @@ module.exports.updateAvatar = (req, res) => {
       runValidators: true,
     },
   )
-    .orFail(new Error(NOT_FOUND_ERROR_MESSAGE))
+    .orFail(() => new NotFoundError({ message: 'Нет пользователя с таким id' }))
     .then((user) => {
       if (user) {
         res.send({ data: user });
       }
     })
-    .catch((error) => {
-      if (error.message === NOT_FOUND_ERROR_MESSAGE) {
-        res.status(ERROR_NOT_FOUND_CODE).send({
-          message: 'Ресурс не найден',
-        });
-        return;
+    .catch(() => {
+      throw new ValidationError({ message: 'Переданы некорректные данные' });
+    })
+    .catch(next);
+};
+
+module.exports.getUserInfo = (req, res, next) => {
+  User.findById(req.user._id)
+    .orFail(() => new NotFoundError({ message: 'Нет пользователя с таким id' }))
+    .then((user) => {
+      if (user) {
+        res.send({ data: user });
       }
-      if (error.name === 'ValidationError') {
-        res
-          .status(ERROR_CODE)
-          .send({ message: 'Переданы некорректные данные' });
-      }
-      res.status(500).send({ message: 'Произошла ошибка' });
-    });
+    })
+    .catch(() => {
+      throw new ValidationError({ message: 'Переданы некорректные данные' });
+    })
+    .catch(next);
 };
