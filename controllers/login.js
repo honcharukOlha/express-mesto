@@ -1,13 +1,15 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const AutorizeError = require('../errors/autorize-error');
+const AutorizeError = require('../errors/authorize-error');
+
+const { JWT_SECRET = 'yandex-dev-key-21' } = process.env;
 
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
   User.findByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, 'some-secret-key', {
+      const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: '7d',
       });
       req.headers.authorization = `Bearer ${token}`;

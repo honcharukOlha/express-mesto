@@ -3,7 +3,7 @@ const validator = require('validator');
 const User = require('../models/user');
 const NotFoundError = require('../errors/not-found-error');
 const ValidationError = require('../errors/validation-error');
-const MongoError = require('../errors/mongo-error');
+const ConflictError = require('../errors/conflict-error');
 
 module.exports.getUser = (req, res, next) => {
   User.find({})
@@ -34,7 +34,7 @@ module.exports.createUser = (req, res, next) => {
     password,
   } = req.body;
   if ((!email || !password)) {
-    throw new MongoError({ message: 'Не заполнены обязательные поля' });
+    throw new ConflictError({ message: 'Не заполнены обязательные поля' });
   }
   if (!validator.isEmail(email)) {
     throw new ValidationError({ message: 'Переданы некорректные данные' });
@@ -47,8 +47,8 @@ module.exports.createUser = (req, res, next) => {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'MongoError' && err.code === 11000) {
-        const error = new MongoError({ message: 'Пользователь с указанным email уже существует' });
-        error.statusCode = MongoError;
+        const error = new ConflictError({ message: 'Пользователь с указанным email уже существует' });
+        error.statusCode = error;
         next(error);
       }
     })

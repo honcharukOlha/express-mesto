@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs'); // импортируем bcrypt
 const mongoose = require('mongoose');
 const validator = require('validator');
-const AutorizeError = require('../errors/autorize-error');
+const AutorizeError = require('../errors/authorize-error');
 
 const userSchema = new mongoose.Schema({
   name: {
