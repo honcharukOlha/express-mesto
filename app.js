@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
-const { celebrate, Joi } = require('celebrate');
+const { celebrate, Joi, errors } = require('celebrate');
 const bodyParser = require('body-parser');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
@@ -58,8 +58,8 @@ app.use('/*', (req, res, next) => {
   }));
 });
 
-app.use(() => {
-  handlingErrors();
-});
+app.use((errors));
+
+app.use(handlingErrors);
 
 app.listen(PORT);
