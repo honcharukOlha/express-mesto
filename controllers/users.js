@@ -33,7 +33,7 @@ module.exports.createUser = (req, res, next) => {
     email,
     password,
   } = req.body;
-  if ((!email || !password)) {
+  if (!email || !password) {
     throw new ConflictError({ message: 'Не заполнены обязательные поля' });
   }
   if (!validator.isEmail(email)) {
@@ -46,9 +46,6 @@ module.exports.createUser = (req, res, next) => {
     }))
     .then((user) => res.status(200).send({
       _id: user._id,
-      name: user.name,
-      about: user.about,
-      avatar: user.avatar,
       email: user.email,
     }))
     .catch((err) => {
