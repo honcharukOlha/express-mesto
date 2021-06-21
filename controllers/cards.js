@@ -21,7 +21,7 @@ module.exports.createCard = (req, res, next) => {
 
 module.exports.likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
-    req.params.cardId,
+    req.params._id,
     { $addToSet: { likes: req.user._id } },
     { new: true },
   )
@@ -39,7 +39,7 @@ module.exports.likeCard = (req, res, next) => {
 
 module.exports.dislikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
-    req.params.cardId,
+    req.params._id,
     { $pull: { likes: req.user._id } }, // убрать _id из массива
     { new: true },
   )
@@ -57,23 +57,21 @@ module.exports.dislikeCard = (req, res, next) => {
 
 module.exports.deleteCard = (req, res, next) => {
   const owner = req.user._id;
-  const { _cardId } = req.params;
+  const { _id } = req.params;
   const SUCCESS = 200;
-  Card.findOneAndDelete({ _id: req.params.cardId, owner })
-    .orFail(() => new NotFoundError({ message: 'Нет пользователя с таким id' }))
+  Card.findOneAndDelete({ _id: req.params._id, owner })
+    .orFail(() => new NotFoundError('Нет пользователя с таким id'))
     .then((card) => {
       if (card.owner) {
-        Card.findByIdAndDelete(_cardId).then(() => {
+        Card.findByIdAndDelete(_id).then(() => {
           res.status(SUCCESS).send({ message: 'Карточка успешно удалена' });
         });
       } else {
-        throw new ForbiddenError({
-          message: 'Удаление карточек других пользователей невозможно',
-        });
+        throw new ForbiddenError('Удаление карточек других пользователей невозможно');
       }
     })
     .catch(() => {
-      throw new ValidationError({ message: 'Переданы некорректные данные' });
+      throw new ValidationError('Переданы некорректные данные');
     })
     .catch(next);
 };

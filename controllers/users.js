@@ -12,15 +12,15 @@ module.exports.getUser = (req, res, next) => {
 };
 
 module.exports.getUserById = (req, res, next) => {
-  User.findById(req.params.userId)
-    .orFail(() => new NotFoundError({ message: 'Нет пользователя с таким id' }))
+  User.findById(req.params._id)
+    .orFail(() => new NotFoundError('Нет пользователя с таким id'))
     .then((user) => {
       if (user) {
         res.send({ data: user });
       }
     })
     .catch(() => {
-      throw new ValidationError({ message: 'Переданы некорректные данные' });
+      throw new ValidationError('Переданы некорректные данные');
     })
     .catch(next);
 };
@@ -34,10 +34,10 @@ module.exports.createUser = (req, res, next) => {
     password,
   } = req.body;
   if (!email || !password) {
-    throw new ConflictError({ message: 'Не заполнены обязательные поля' });
+    throw new ConflictError('Не заполнены обязательные поля');
   }
   if (!validator.isEmail(email)) {
-    throw new ValidationError({ message: 'Переданы некорректные данные' });
+    throw new ValidationError('Переданы некорректные данные');
   }
   // хешируем пароль
   bcrypt.hash(req.body.password, 10)
@@ -50,8 +50,8 @@ module.exports.createUser = (req, res, next) => {
     }))
     .catch((err) => {
       if (err.name === 'MongoError' && err.code === 11000) {
-        const error = new ConflictError({ message: 'Пользователь с указанным email уже существует' });
-        error.statusCode = error;
+        const error = new ConflictError('Пользователь с указанным email уже существует');
+        error.statusCode = 409;
         next(error);
       }
     })
@@ -71,14 +71,14 @@ module.exports.updateUser = (req, res, next) => {
       runValidators: true,
     },
   )
-    .orFail(() => new NotFoundError({ message: 'Нет пользователя с таким id' }))
+    .orFail(() => new NotFoundError('Нет пользователя с таким id'))
     .then((user) => {
       if (user) {
         res.send({ data: user });
       }
     })
     .catch(() => {
-      throw new ValidationError({ message: 'Переданы некорректные данные' });
+      throw new ValidationError('Переданы некорректные данные');
     })
     .catch(next);
 };
@@ -93,28 +93,28 @@ module.exports.updateAvatar = (req, res, next) => {
       runValidators: true,
     },
   )
-    .orFail(() => new NotFoundError({ message: 'Нет пользователя с таким id' }))
+    .orFail(() => new NotFoundError('Нет пользователя с таким id'))
     .then((user) => {
       if (user) {
         res.send({ data: user });
       }
     })
     .catch(() => {
-      throw new ValidationError({ message: 'Переданы некорректные данные' });
+      throw new ValidationError('Переданы некорректные данные');
     })
     .catch(next);
 };
 
 module.exports.getUserInfo = (req, res, next) => {
   User.findById(req.user._id)
-    .orFail(() => new NotFoundError({ message: 'Нет пользователя с таким id' }))
+    .orFail(() => new NotFoundError('Нет пользователя с таким id'))
     .then((user) => {
       if (user) {
         res.send({ data: user });
       }
     })
     .catch(() => {
-      throw new ValidationError({ message: 'Переданы некорректные данные' });
+      throw new ValidationError('Переданы некорректные данные');
     })
     .catch(next);
 };

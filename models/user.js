@@ -9,14 +9,14 @@ const userSchema = new mongoose.Schema({
     default: 'Жак-Ив Кусто',
     required: true,
     minlength: 2,
-    maxlength: 30,
+    maxlength: 24,
   },
   about: {
     type: String,
     default: 'Исследователь',
     required: true,
     minlength: 2,
-    maxlength: 30,
+    maxlength: 24,
   },
   avatar: {
     type: String,

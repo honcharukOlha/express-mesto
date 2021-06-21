@@ -47,6 +47,7 @@ app.post('/signin', celebrate({
     password: Joi.string().required().min(8),
   }),
 }), login);
+
 // авторизация
 app.use(auth);
 
