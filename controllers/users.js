@@ -13,7 +13,7 @@ module.exports.getUser = (req, res, next) => {
 
 module.exports.getUserById = (req, res, next) => {
   User.findById(req.params._id)
-    .orFail(() => new NotFoundError('Нет пользователя с таким id'))
+    .orFail(() => new NotFoundError('Пользователь не найден'))
     .then((user) => {
       if (user) {
         res.send({ data: user });
@@ -71,7 +71,7 @@ module.exports.updateUser = (req, res, next) => {
       runValidators: true,
     },
   )
-    .orFail(() => new NotFoundError('Нет пользователя с таким id'))
+    .orFail(() => new NotFoundError('Пользователь не найден'))
     .then((user) => {
       if (user) {
         res.send({ data: user });
@@ -93,7 +93,7 @@ module.exports.updateAvatar = (req, res, next) => {
       runValidators: true,
     },
   )
-    .orFail(() => new NotFoundError('Нет пользователя с таким id'))
+    .orFail(() => new NotFoundError('Пользователь не найден'))
     .then((user) => {
       if (user) {
         res.send({ data: user });
