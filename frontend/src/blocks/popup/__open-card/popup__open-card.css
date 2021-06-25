@@ -1,0 +1,9 @@
+.popup__open-card {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: auto;
+    left: auto;
+    margin: auto;
+    font-family: 'Inter', Arial, Helvetica, sans-serif;
+}

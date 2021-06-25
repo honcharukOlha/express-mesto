@@ -1,0 +1,13 @@
+    .element__nowrap {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        margin: 15px 16px 10px 21px;
+        padding: 0;
+    }
+    
+    @media screen and (max-width: 768px) {
+        .element__nowrap {
+            margin-left: 18px;
+        }
+    }

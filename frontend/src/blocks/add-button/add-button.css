@@ -1,0 +1,27 @@
+.add-button {
+  width: 150px;
+  min-height: 50px;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  box-sizing: border-box;
+  border-radius: 2px;
+  background-image: url(../../images/plus.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #000000;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  transition: opacity 0.5s linear 0.1s;
+}
+
+.add-button:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 900px) {
+  .add-button {
+    width: 282px;
+  }
+}

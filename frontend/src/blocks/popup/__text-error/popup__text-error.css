@@ -1,0 +1,12 @@
+.popup__text-error {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.5s, visibility 0.5s;
+    min-width: 164px;
+    min-height: 12px;
+    margin: 5px auto 13px 0;
+    padding: 0;
+    font-size: 12px;
+    line-height: 15px;
+    color: #FF0000;
+}

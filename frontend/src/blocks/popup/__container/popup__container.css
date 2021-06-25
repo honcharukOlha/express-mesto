@@ -1,0 +1,18 @@
+.popup__container {
+    display: flex;
+    position: absolute;
+    top: auto;
+    left: auto;
+    justify-content: center;
+    align-items: center;
+    max-width: 430px;
+    min-height: 330px;
+    margin: auto;
+    font-family: 'Inter', Arial, Helvetica, sans-serif;
+}
+
+@media screen and (max-width: 768px) {
+    .popup__container {
+        max-width: 282px;
+    }
+}

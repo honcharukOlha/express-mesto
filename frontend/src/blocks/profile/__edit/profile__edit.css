@@ -1,0 +1,10 @@
+.profile__edit {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    width: 26px;
+    height: 26px;
+    background-image: url(../../../images/Vector.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+}

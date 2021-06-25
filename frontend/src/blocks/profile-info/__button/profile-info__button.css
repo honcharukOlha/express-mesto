@@ -1,0 +1,26 @@
+    .profile-info__button {
+        width: 24px;
+        height: 24px;
+        margin-top: 15px;
+        background-image: url(../../../images/pensil.svg);
+        background-color: #000000;
+        background-position: center;
+        background-repeat: no-repeat;
+        border: 1px solid #ffffff;
+        outline: none;
+        transition: opacity .5s linear .1s;
+    }
+    
+    .profile-info__button:hover {
+        opacity: 0.6;
+        cursor: pointer;
+    }
+    
+    @media screen and (max-width: 900px) {
+        .profile-info__button {
+            width: 18px;
+            height: 18px;
+            box-sizing: border-box;
+            margin-top: 9px;
+        }
+    }

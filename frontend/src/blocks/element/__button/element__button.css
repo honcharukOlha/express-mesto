@@ -1,0 +1,19 @@
+.element__button {
+    background-image: url(../../../images/heart.svg);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-width: 21px;
+    min-height: 19px;
+    margin: 5px 1px 0 0;
+    padding: 0;
+    background-color: #ffffff;
+    border: none;
+    outline: none;
+    transition: opacity .5s linear .1s;
+}
+
+.element__button:hover {
+    opacity: .5;
+    cursor: pointer;
+}

@@ -1,0 +1,21 @@
+.profile__edits {
+    position: absolute;
+    min-width: 120px;
+    min-height: 120px;
+    object-fit: cover;
+    border-radius: 100px;
+    margin: 0 30px 0 0;
+    background-color: rgba(0, 0, 0, .5);
+    opacity: 0;
+}
+
+.profile__edits:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 900px) {
+    .profile__edits {
+        margin: 0 auto 22.25px;
+    }
+}
