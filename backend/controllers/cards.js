@@ -5,21 +5,21 @@ const ForbiddenError = require('../errors/forbidden-error');
 
 module.exports.getCards = (req, res, next) => {
   Card.find({})
-    .then((card) => res.send({ data: card }))
+    .then((card) => res.send(card))
     .catch(next);
 };
 
 module.exports.getCardById = (req, res, next) => {
   Card.findById(req.params.cardId)
     .orFail(() => new NotFoundError('Карточка не найдена'))
-    .then((card) => res.send({ data: card }))
+    .then((card) => res.send(card))
     .catch(next);
 };
 
 module.exports.createCard = (req, res, next) => {
   const { name, link, owner = req.user._id } = req.body;
   Card.create({ name, link, owner })
-    .then((card) => res.send({ data: card }))
+    .then((card) => res.send(card))
     .catch(() => {
       throw new ValidationError('Переданы некорректные данные');
     })
@@ -35,7 +35,7 @@ module.exports.likeCard = (req, res, next) => {
     .orFail(() => new NotFoundError('Карточка не найдена'))
     .then((card) => {
       if (card) {
-        res.send({ data: card });
+        res.send(card);
       }
     })
     .catch(next);
@@ -50,7 +50,7 @@ module.exports.dislikeCard = (req, res, next) => {
     .orFail(() => new NotFoundError('Карточка не найдена'))
     .then((card) => {
       if (card) {
-        res.send({ data: card });
+        res.send(card);
       }
     })
     .catch(next);
@@ -63,12 +63,13 @@ module.exports.deleteCard = (req, res, next) => {
     .orFail(() => new NotFoundError('Карточка не найдена'))
     .then((card) => {
       if (card.owner.toString() !== owner) {
-        throw new ForbiddenError('Удаление карточек других пользователей невозможно');
+        throw new ForbiddenError(
+          'Удаление карточек других пользователей невозможно',
+        );
       }
-      Card.findByIdAndDelete(req.params.cardId)
-        .then(() => {
-          res.status(SUCCESS).send('Карточка успешно удалена');
-        });
+      Card.findByIdAndDelete(req.params.cardId).then(() => {
+        res.status(SUCCESS).send('Карточка успешно удалена');
+      });
     })
     .catch(next);
 };
