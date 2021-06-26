@@ -24,7 +24,7 @@ router.get(
 router.patch(
   '/me',
   celebrate({
-    params: Joi.object()
+    body: Joi.object()
       .keys({
         name: Joi.string().required().min(2).max(24),
         about: Joi.string().required().min(2).max(24),
@@ -37,7 +37,7 @@ router.patch(
 router.patch(
   '/me/avatar',
   celebrate({
-    params: Joi.object().keys({
+    body: Joi.object().keys({
       avatar: Joi.string()
         .required()
         .regex(/^(https?:\/\/)([\da-z.-]+)\.([a-z.]{2,6})([/\w\W.-]*)#?$/),
