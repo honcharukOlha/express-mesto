@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://auth.nomoreparties.co';
+export const BASE_URL = 'https://api.super.mesto.nomoredomains.club';
 
 export const register = (email, password) => {
     return fetch(`${BASE_URL}/signup`, {
@@ -19,7 +19,7 @@ export const authorize = (email, password) => {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({email, password}),
     })
         .then(handleResult)
         .then((data) => {
