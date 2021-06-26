@@ -41,7 +41,6 @@ function App() {
         if (loggedIn) {
             Promise.all([api.getUserInfo(), api.getInitialCards()])
                 .then(([user, cards]) => {
-                    console.log(user);
                     setCurrentUser(user);
                     setCards(cards);
                 })
@@ -56,7 +55,7 @@ function App() {
             .then((res) => {
                 if (res) {
                     cleanCallback();
-                    setUserData(res.data);
+                    setUserData(res);
                     setRegistrSuccessful(true);
                     history.push('/sign-in');
                 }
@@ -130,8 +129,6 @@ function App() {
     function handleCardDelete(card) {
         api.deleteCard(card._id)
             .then(() => {
-                console.log(cards);
-                console.log(card.id);
                 setCards(cards.filter((c) => !(c._id === card._id)));
             })
             .catch((err) => console.log(err));
