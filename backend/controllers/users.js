@@ -26,7 +26,9 @@ module.exports.getUserById = (req, res, next) => {
 };
 
 module.exports.createUser = (req, res, next) => {
-  const { name, about, avatar, email, password } = req.body;
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
   if (!email || !password) {
     throw new ConflictError('Не заполнены обязательные поля');
   }
@@ -36,21 +38,13 @@ module.exports.createUser = (req, res, next) => {
   // хешируем пароль
   bcrypt
     .hash(req.body.password, 10)
-    .then((hash) =>
-      User.create({
-        name,
-        about,
-        avatar,
-        email,
-        password: hash,
-      }),
-    )
-    .then((user) =>
-      res.status(200).send({
-        _id: user._id,
-        email: user.email,
-      }),
-    )
+    .then((hash) => User.create({
+      name, about, avatar, email, password: hash,
+    }))
+    .then((user) => res.status(200).send({
+      _id: user._id,
+      email: user.email,
+    }))
     .catch((err) => {
       if (err.name === 'MongoError' && err.code === 11000) {
         const error = new ConflictError(
