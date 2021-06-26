@@ -12,35 +12,65 @@ const {
 
 router.get('/', getCards);
 
-router.get('/:cardId', celebrate({
-  params: Joi.object().keys({
-    cardId: Joi.string().required().length(24).hex(),
-  }).unknown(true),
-}), getCardById);
-
-router.post('/', celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().required().min(2).max(24),
-    link: Joi.string().required().regex(/^(https?:\/\/)([\da-z.-]+)\.([a-z.]{2,6})([/\w\W.-]*)#?$/),
+router.get(
+  '/:cardId',
+  celebrate({
+    params: Joi.object()
+      .keys({
+        cardId: Joi.string().required().length(24).hex(),
+      })
+      .unknown(true),
   }),
-}), createCard);
+  getCardById,
+);
 
-router.put('/:cardId/likes', celebrate({
-  params: Joi.object().keys({
-    cardId: Joi.string().required().length(24).hex(),
-  }).unknown(true),
-}), likeCard);
+router.post(
+  '/',
+  celebrate({
+    body: Joi.object().keys({
+      name: Joi.string().required().min(2).max(24),
+      link: Joi.string()
+        .required()
+        .regex(/^(https?:\/\/)([\da-z.-]+)\.([a-z.]{2,6})([/\w\W.-]*)#?$/),
+    }),
+  }),
+  createCard,
+);
 
-router.delete('/:cardId/likes', celebrate({
-  params: Joi.object().keys({
-    cardId: Joi.string().required().length(24).hex(),
-  }).unknown(true),
-}), dislikeCard);
+router.put(
+  '/likes/:cardId',
+  celebrate({
+    params: Joi.object()
+      .keys({
+        cardId: Joi.string().required().length(24).hex(),
+      })
+      .unknown(true),
+  }),
+  likeCard,
+);
 
-router.delete('/:cardId', celebrate({
-  params: Joi.object().keys({
-    cardId: Joi.string().required().length(24).hex(),
-  }).unknown(true),
-}), deleteCard);
+router.delete(
+  '/likes/:cardId',
+  celebrate({
+    params: Joi.object()
+      .keys({
+        cardId: Joi.string().required().length(24).hex(),
+      })
+      .unknown(true),
+  }),
+  dislikeCard,
+);
+
+router.delete(
+  '/:cardId',
+  celebrate({
+    params: Joi.object()
+      .keys({
+        cardId: Joi.string().required().length(24).hex(),
+      })
+      .unknown(true),
+  }),
+  deleteCard,
+);
 
 module.exports = router;
