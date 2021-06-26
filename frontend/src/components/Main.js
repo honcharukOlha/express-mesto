@@ -1,7 +1,7 @@
 import '../index.css';
 import React from 'react';
 import Card from './Card.js';
-import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
+import {CurrentUserContext} from '../contexts/CurrentUserContext.js';
 
 function Main({
     cards,
@@ -26,39 +26,39 @@ function Main({
     }
 
     return (
-        <main className="content">
-            <section className="profile">
+        <main className='content'>
+            <section className='profile'>
                 <img
                     src={currentUser.avatar}
-                    className="profile__avatar"
-                    alt="Фото, которое вы сами выберете"
+                    className='profile__avatar'
+                    alt='Фото, которое вы сами выберете'
                 />
-                <div className="profile__edits" onClick={onEditAvatar}>
-                    <div className="profile__edit"></div>
+                <div className='profile__edits' onClick={onEditAvatar}>
+                    <div className='profile__edit'></div>
                 </div>
-                <div className="profile-info">
-                    <div className="profile-info__nowrap">
-                        <h1 className="profile-info__name">
+                <div className='profile-info'>
+                    <div className='profile-info__nowrap'>
+                        <h1 className='profile-info__name'>
                             {currentUser.name}
                         </h1>
                         <button
-                            type="button"
-                            className="profile-info__button"
+                            type='button'
+                            className='profile-info__button'
                             onClick={onEditProfile}
                         />
                     </div>
-                    <p className="profile-info__activity">
+                    <p className='profile-info__activity'>
                         {currentUser.about}
                     </p>
                 </div>
                 <button
-                    type="button"
-                    className="add-button"
+                    type='button'
+                    className='add-button'
                     onClick={onAddPlace}
                 />
             </section>
 
-            <section className="elements">{cards.map(mapCard)}</section>
+            <section className='elements'>{cards.map(mapCard)}</section>
         </main>
     );
 }

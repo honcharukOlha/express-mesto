@@ -7,7 +7,7 @@ const ConflictError = require('../errors/conflict-error');
 
 module.exports.getUser = (req, res, next) => {
   User.find({})
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send(user))
     .catch(next);
 };
 
@@ -16,7 +16,7 @@ module.exports.getUserById = (req, res, next) => {
     .orFail(() => new NotFoundError('Пользователь не найден'))
     .then((user) => {
       if (user) {
-        res.send({ data: user });
+        res.send(user);
       }
     })
     .catch(() => {
@@ -26,13 +26,7 @@ module.exports.getUserById = (req, res, next) => {
 };
 
 module.exports.createUser = (req, res, next) => {
-  const {
-    name,
-    about,
-    avatar,
-    email,
-    password,
-  } = req.body;
+  const { name, about, avatar, email, password } = req.body;
   if (!email || !password) {
     throw new ConflictError('Не заполнены обязательные поля');
   }
@@ -40,17 +34,28 @@ module.exports.createUser = (req, res, next) => {
     throw new ValidationError('Переданы некорректные данные');
   }
   // хешируем пароль
-  bcrypt.hash(req.body.password, 10)
-    .then((hash) => User.create({
-      name, about, avatar, email, password: hash,
-    }))
-    .then((user) => res.status(200).send({
-      _id: user._id,
-      email: user.email,
-    }))
+  bcrypt
+    .hash(req.body.password, 10)
+    .then((hash) =>
+      User.create({
+        name,
+        about,
+        avatar,
+        email,
+        password: hash,
+      }),
+    )
+    .then((user) =>
+      res.status(200).send({
+        _id: user._id,
+        email: user.email,
+      }),
+    )
     .catch((err) => {
       if (err.name === 'MongoError' && err.code === 11000) {
-        const error = new ConflictError('Пользователь с указанным email уже существует');
+        const error = new ConflictError(
+          'Пользователь с указанным email уже существует',
+        );
         error.statusCode = 409;
         next(error);
       }
@@ -74,7 +79,7 @@ module.exports.updateUser = (req, res, next) => {
     .orFail(() => new NotFoundError('Пользователь не найден'))
     .then((user) => {
       if (user) {
-        res.send({ data: user });
+        res.send(user);
       }
     })
     .catch(() => {
@@ -96,7 +101,7 @@ module.exports.updateAvatar = (req, res, next) => {
     .orFail(() => new NotFoundError('Пользователь не найден'))
     .then((user) => {
       if (user) {
-        res.send({ data: user });
+        res.send(user);
       }
     })
     .catch(() => {
@@ -110,7 +115,7 @@ module.exports.getUserInfo = (req, res, next) => {
     .orFail(() => new NotFoundError('Нет пользователя с таким id'))
     .then((user) => {
       if (user) {
-        res.send({ data: user });
+        res.send(user);
       }
     })
     .catch(() => {

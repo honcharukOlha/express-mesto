@@ -1,5 +1,5 @@
 import '../index.css';
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
     BrowserRouter,
     Route,
@@ -7,7 +7,7 @@ import {
     useHistory,
     Redirect,
 } from 'react-router-dom';
-import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
+import {CurrentUserContext} from '../contexts/CurrentUserContext.js';
 import Header from './Header.js';
 import InfoTooltip from './InfoTooltip.js';
 import Main from './Main.js';
@@ -41,6 +41,7 @@ function App() {
         if (loggedIn) {
             Promise.all([api.getUserInfo(), api.getInitialCards()])
                 .then(([user, cards]) => {
+                    console.log(user);
                     setCurrentUser(user);
                     setCards(cards);
                 })
@@ -108,7 +109,7 @@ function App() {
 
     function handleSignOut() {
         localStorage.removeItem('jwt');
-        setCurrentUser({ isLoggedIn: false });
+        setCurrentUser({isLoggedIn: false});
         history.push('/sign-in');
     }
 
@@ -189,12 +190,12 @@ function App() {
 
     return (
         <CurrentUserContext.Provider value={currentUser}>
-            <div className="root">
-                <div className="page">
+            <div className='root'>
+                <div className='page'>
                     <Header userData={userData} onSignOut={handleSignOut} />
                     <Switch>
                         <ProtectedRoute
-                            path="/main"
+                            path='/main'
                             component={Main}
                             loggedIn={loggedIn}
                             userData={userData}
@@ -206,13 +207,13 @@ function App() {
                             onCardLike={handleCardLike}
                             onCardDelete={handleCardDelete}
                         />
-                        <Route exact path="/sign-in">
+                        <Route exact path='/sign-in'>
                             <Login onLogin={handleLogin} />
                         </Route>
-                        <Route exact path="/sign-up">
+                        <Route exact path='/sign-up'>
                             <Register onRegister={handleRegister} />
                         </Route>
-                        <Route exact path="/" />
+                        <Route exact path='/' />
                     </Switch>
                     <Footer />
                 </div>
@@ -227,15 +228,15 @@ function App() {
                     onAddPlace={handleAddPlaceSubmit}
                 />
                 <ImagePopup
-                    name="open_picture"
+                    name='open_picture'
                     card={selectedCard}
                     isOpen={isPopupWithImageOpen}
                     onClose={closeAllPopups}
                 />
                 <PopupWithForm
-                    name="open_confirmation"
-                    title="Вы уверены?"
-                    input="Да"
+                    name='open_confirmation'
+                    title='Вы уверены?'
+                    input='Да'
                 />
                 <EditAvatarPopup
                     isOpen={isEditAvatarPopupOpen}
