@@ -1,5 +1,4 @@
 const bcrypt = require('bcryptjs'); // импортируем bcrypt
-const validator = require('validator');
 const User = require('../models/user');
 const NotFoundError = require('../errors/not-found-error');
 const ValidationError = require('../errors/validation-error');
@@ -19,27 +18,28 @@ module.exports.getUserById = (req, res, next) => {
         res.send(user);
       }
     })
-    .catch(() => {
-      throw new ValidationError('Переданы некорректные данные');
-    })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new ValidationError('Переданы некорректные данные'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 module.exports.createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
-  if (!email || !password) {
-    throw new ConflictError('Не заполнены обязательные поля');
-  }
-  if (!validator.isEmail(email)) {
-    throw new ValidationError('Переданы некорректные данные');
-  }
   // хешируем пароль
   bcrypt
-    .hash(req.body.password, 10)
+    .hash(password, 10)
     .then((hash) => User.create({
-      name, about, avatar, email, password: hash,
+      name,
+      about,
+      avatar,
+      email,
+      password: hash,
     }))
     .then((user) => res.status(200).send({
       _id: user._id,
@@ -76,10 +76,13 @@ module.exports.updateUser = (req, res, next) => {
         res.send(user);
       }
     })
-    .catch(() => {
-      throw new ValidationError('Переданы некорректные данные');
-    })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new ValidationError('Переданы некорректные данные'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 module.exports.updateAvatar = (req, res, next) => {
@@ -98,10 +101,13 @@ module.exports.updateAvatar = (req, res, next) => {
         res.send(user);
       }
     })
-    .catch(() => {
-      throw new ValidationError('Переданы некорректные данные');
-    })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new ValidationError('Переданы некорректные данные'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 module.exports.getUserInfo = (req, res, next) => {
@@ -112,8 +118,11 @@ module.exports.getUserInfo = (req, res, next) => {
         res.send(user);
       }
     })
-    .catch(() => {
-      throw new ValidationError('Переданы некорректные данные');
-    })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new ValidationError('Переданы некорректные данные'));
+      } else {
+        next(err);
+      }
+    });
 };

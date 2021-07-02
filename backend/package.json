@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "backend for mesto",
   "main": "app.js",
-  "lint": "npx eslint .",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
@@ -41,11 +40,5 @@
     "url": "https://github.com/honcharukOlha/express-mesto/issues"
   },
   "homepage": "https://github.com/honcharukOlha/express-mesto#readme",
-  "keywords": [],
-  "prettier": {
-    "singleQuote": true,
-    "printWidth": false,
-    "trailingComma": "all",
-    "implicit-arrow-linebreak": "on"
-  }
+  "keywords": []
 }

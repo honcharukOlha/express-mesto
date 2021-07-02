@@ -193,6 +193,7 @@ function App() {
                 <div className='page'>
                     <Header userData={userData} onSignOut={handleSignOut} />
                     <Switch>
+                        <Route path='/main' />
                         <ProtectedRoute
                             path='/main'
                             component={Main}

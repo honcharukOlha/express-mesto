@@ -28,7 +28,7 @@ router.post(
   '/',
   celebrate({
     body: Joi.object().keys({
-      name: Joi.string().required().min(2).max(24),
+      name: Joi.string().required().min(2).max(30),
       link: Joi.string()
         .required()
         .regex(/^(https?:\/\/)([\da-z.-]+)\.([a-z.]{2,6})([/\w\W.-]*)#?$/),
@@ -38,7 +38,7 @@ router.post(
 );
 
 router.put(
-  '/likes/:cardId',
+  '/:cardId/likes',
   celebrate({
     params: Joi.object()
       .keys({
@@ -50,7 +50,7 @@ router.put(
 );
 
 router.delete(
-  '/likes/:cardId',
+  '/:cardId/likes',
   celebrate({
     params: Joi.object()
       .keys({

@@ -19,7 +19,6 @@ const { PORT = 3000 } = process.env;
 
 // создаем приложение
 const app = express();
-app.use(express.json());
 
 app.use(cors());
 app.options('https://super.mesto.nomoredomains.club', cors());
@@ -68,8 +67,13 @@ app.post(
   '/signup',
   celebrate({
     body: Joi.object().keys({
-      email: Joi.string().email(),
+      email: Joi.string().required().email(),
       password: Joi.string().required().min(8),
+      name: Joi.string().min(2).max(30),
+      about: Joi.string().min(2).max(30),
+      avatar: Joi.string().regex(
+        /^(https?:\/\/)([\da-z.-]+)\.([a-z.]{2,6})([/\w\W.-]*)#?$/,
+      ),
     }),
   }),
   createUser,
@@ -79,7 +83,7 @@ app.post(
   '/signin',
   celebrate({
     body: Joi.object().keys({
-      email: Joi.string().email(),
+      email: Joi.string().required().email(),
       password: Joi.string().required().min(8),
     }),
   }),

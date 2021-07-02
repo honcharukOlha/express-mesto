@@ -11,8 +11,10 @@ const {
 
 router.get('/', getUser);
 
+router.get('/me', getUserInfo);
+
 router.get(
-  '/id/:_id',
+  '/:_id',
   celebrate({
     params: Joi.object().keys({
       _id: Joi.string().length(24).hex(),
@@ -26,8 +28,8 @@ router.patch(
   celebrate({
     body: Joi.object()
       .keys({
-        name: Joi.string().required().min(2).max(24),
-        about: Joi.string().required().min(2).max(24),
+        name: Joi.string().required().min(2).max(30),
+        about: Joi.string().required().min(2).max(30),
       })
       .unknown(true),
   }),
@@ -45,7 +47,5 @@ router.patch(
   }),
   updateAvatar,
 );
-
-router.get('/me', getUserInfo);
 
 module.exports = router;

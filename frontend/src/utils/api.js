@@ -50,7 +50,7 @@ export class Api {
         if (!isLike) {
             method = 'DELETE';
         }
-        return fetch(`${this.baseUrl}/cards/likes/${cardId}`, {
+        return fetch(`${this.baseUrl}/cards/${cardId}/likes`, {
             method: method,
             headers: this._getHeaders(),
         }).then(this._handleResult);
