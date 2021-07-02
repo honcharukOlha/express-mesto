@@ -19,6 +19,7 @@ const { PORT = 3000 } = process.env;
 
 // создаем приложение
 const app = express();
+app.use(express.json());
 
 app.use(cors());
 app.options('https://super.mesto.nomoredomains.club', cors());
@@ -93,7 +94,6 @@ app.post(
 // авторизация
 app.use(auth);
 
-app.use(bodyParser.json());
 app.use('/users', auth, userRouter);
 app.use('/cards', auth, cardRouter);
 app.use('/*', (req, res, next) => {
