@@ -5,7 +5,6 @@ require('dotenv').config();
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const { celebrate, Joi, errors } = require('celebrate');
-const bodyParser = require('body-parser');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 const { login } = require('./controllers/login');

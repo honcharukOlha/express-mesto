@@ -193,7 +193,7 @@ function App() {
                 <div className='page'>
                     <Header userData={userData} onSignOut={handleSignOut} />
                     <Switch>
-                        <Route path='/main' />
+                        <Route exact path='/' />
                         <ProtectedRoute
                             path='/main'
                             component={Main}
@@ -213,7 +213,6 @@ function App() {
                         <Route exact path='/sign-up'>
                             <Register onRegister={handleRegister} />
                         </Route>
-                        <Route exact path='/' />
                     </Switch>
                     <Footer />
                 </div>

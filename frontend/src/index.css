@@ -27,6 +27,7 @@
 @import url(../src/blocks/element/__button/_active/element__button_active.css);
 @import url(../src/blocks/element/__like/element__like.css);
 @import url(../src/blocks/element/__basket/element__basket.css);
+@import url(../src/blocks/element/__basket/_hidden/element__basket_hidden.css);
 @import url(../src/blocks/element/__image/element__image.css);
 @import url(../src/blocks/element/__image/_transform/element__image_transform.css);
 @import url(../src/blocks/footer/footer.css);
