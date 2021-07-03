@@ -97,9 +97,9 @@ app.use('/users', auth, userRouter);
 app.use('/cards', auth, cardRouter);
 app.use('/*', (req, res, next) => {
   next(
-    new NotFoundError({
-      message: 'Ресурс не найден',
-    }),
+    new NotFoundError(
+      'Ресурс не найден',
+    ),
   );
 });
 
